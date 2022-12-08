@@ -31,6 +31,27 @@
 						"type": "DatasetReference"
 					},
 					"name": "source4"
+				},
+				{
+					"dataset": {
+						"referenceName": "PackageTypesOLTP",
+						"type": "DatasetReference"
+					},
+					"name": "source5"
+				},
+				{
+					"dataset": {
+						"referenceName": "StockItems",
+						"type": "DatasetReference"
+					},
+					"name": "source6"
+				},
+				{
+					"dataset": {
+						"referenceName": "PeopleOLTP",
+						"type": "DatasetReference"
+					},
+					"name": "source7"
 				}
 			],
 			"sinks": [
@@ -47,6 +68,15 @@
 				},
 				{
 					"name": "join3"
+				},
+				{
+					"name": "join4"
+				},
+				{
+					"name": "join5"
+				},
+				{
+					"name": "join6"
 				}
 			],
 			"scriptLines": [
@@ -161,6 +191,75 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> source4",
+				"source(output(",
+				"          PackageTypeID as integer,",
+				"          PackageTypeName as string,",
+				"          LastEditedBy as integer,",
+				"          ValidFrom as timestamp,",
+				"          ValidTo as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> source5",
+				"source(output(",
+				"          StockItemID as integer,",
+				"          StockItemName as string,",
+				"          SupplierID as integer,",
+				"          ColorID as integer,",
+				"          UnitPackageID as integer,",
+				"          OuterPackageID as integer,",
+				"          Brand as string,",
+				"          Size as string,",
+				"          LeadTimeDays as integer,",
+				"          QuantityPerOuter as integer,",
+				"          IsChillerStock as boolean,",
+				"          Barcode as string,",
+				"          TaxRate as decimal(18,3),",
+				"          UnitPrice as decimal(18,2),",
+				"          RecommendedRetailPrice as decimal(18,2),",
+				"          TypicalWeightPerUnit as decimal(18,3),",
+				"          MarketingComments as string,",
+				"          InternalComments as string,",
+				"          Photo as binary,",
+				"          CustomFields as string,",
+				"          Tags as string,",
+				"          SearchDetails as string,",
+				"          LastEditedBy as integer,",
+				"          ValidFrom as timestamp,",
+				"          ValidTo as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> source6",
+				"source(output(",
+				"          PersonID as integer,",
+				"          FullName as string,",
+				"          PreferredName as string,",
+				"          SearchName as string,",
+				"          IsPermittedToLogon as boolean,",
+				"          LogonName as string,",
+				"          IsExternalLogonProvider as boolean,",
+				"          HashedPassword as binary,",
+				"          IsSystemUser as boolean,",
+				"          IsEmployee as boolean,",
+				"          IsSalesperson as boolean,",
+				"          UserPreferences as string,",
+				"          PhoneNumber as string,",
+				"          FaxNumber as string,",
+				"          EmailAddress as string,",
+				"          Photo as binary,",
+				"          CustomFields as string,",
+				"          OtherLanguages as string,",
+				"          LastEditedBy as integer,",
+				"          ValidFrom as timestamp,",
+				"          ValidTo as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> source7",
 				"join2, source2 join(source1@OrderID == source2@OrderID,",
 				"     joinType:'outer',",
 				"     matchType:'exact',",
@@ -176,7 +275,22 @@
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join3",
-				"join3 sink(validateSchema: false,",
+				"join3, source5 join(source2@PackageTypeID == source5@PackageTypeID,",
+				"     joinType:'outer',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join4",
+				"join4, source6 join(source2@StockItemID == source6@StockItemID,",
+				"     joinType:'outer',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join5",
+				"join5, source7 join(source1@ContactPersonID == PersonID,",
+				"     joinType:'outer',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join6",
+				"join6 sink(validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     store: 'cache',",
