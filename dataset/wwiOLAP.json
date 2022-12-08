@@ -1,0 +1,12 @@
+{
+	"name": "wwiOLAP",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "wwiOLAP",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	}
+}
