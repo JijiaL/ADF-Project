@@ -1,5 +1,5 @@
 {
-	"name": "dataflow1",
+	"name": "JOINs",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -41,7 +41,7 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "StockItems",
+						"referenceName": "StockItemsOLTP",
 						"type": "DatasetReference"
 					},
 					"name": "source6"
